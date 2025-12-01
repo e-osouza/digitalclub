@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary:    #183d4c;
+  --secondary:  #b37b4b;
+  --bgclaro:    #efeee9;
+  --largura: 1200px;
 }
 
 @theme inline {
@@ -17,6 +21,10 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
