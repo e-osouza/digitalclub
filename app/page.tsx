@@ -391,7 +391,7 @@ export default function Home() {
         <div className="bg-linear-to-r from-[var(--primary)] to-[var(--primary)]/50 absolute w-full h-full top-0 left-0"></div>
       </div>
 
-      {/*section formulario 8*/}
+      {/*section formulario*/}
       <div className="relative bg-[var(--primary)]">
         <div id="formulario" className="max-w-[var(--largura)] px-5 mx-auto py-20 relative">
 
@@ -399,7 +399,7 @@ export default function Home() {
             <Image src={"/icone.svg"} width={1000} height={1000} alt=""/>
           </div>
 
-          <h3 className="text-white uppercase fontspace font-bold text-2xl mb-10 text-center z-1 relative">Preencha seus dados e faça parte do Digital Club.</h3>
+          <h3 className="max-w-[300px] mx-auto text-white font-bold text-lg md:text-2xl mb-8 text-center z-1 relative leading-[1.3]">Preencha seus dados e faça parte do Digital Club.</h3>
 
           <div id="form" className="relative z-1">
             <div className="max-w-[800px] mx-auto relative">
