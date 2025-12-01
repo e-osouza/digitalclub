@@ -376,7 +376,7 @@ export default function Home() {
 
           <div className="col-span-12 md:col-span-7">
             <div className="max-w-[150px] md:max-w-[200px] mb-8">
-              <Image src="/logo.svg" alt="Digital Club" width={500} height={500} priority />
+              <Image src="/logo1.svg" alt="Digital Club" width={500} height={500} priority />
             </div>
 
             <h1 className="text-2xl md:text-4xl leading-[1.1] font-bold text-white mb-4">
