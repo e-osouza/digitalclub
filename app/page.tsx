@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react"
 import Footer from "./componentes/footer"
 import { dlPush } from "./componentes/dataLayer"
 import { useOnScreen } from "./componentes/useOnScreen"
+import { useRouter } from "next/navigation"
 
 
 // --- Funções auxiliares ---
@@ -39,6 +40,8 @@ const formatarWhatsapp = (numero: string): string => {
 };
 
 export default function Home() {
+
+  const router = useRouter()
 
  const [sourceData, setSourceData] = useState({
      page_url: "",
@@ -165,12 +168,13 @@ export default function Home() {
  
          console.log("✅ Lead enviado com sucesso para o RD Station!");
  
-         const currentParams = new URLSearchParams(window.location.search);
-         let symplaUrl = "https://www.sympla.com.br/evento/amazon-ia-summit/3124323";
-         if ([...currentParams].length > 0) {
-           symplaUrl += "?" + currentParams.toString();
-         }
-         window.open(symplaUrl);
+        const currentParams = new URLSearchParams(window.location.search);
+          let obrigadoUrl = "/obrigado";
+          if ([...currentParams].length > 0) {
+            obrigadoUrl += "?" + currentParams.toString();
+          }
+        router.push(obrigadoUrl);
+
        } else {
          const text = await response.text();
          console.error("❌ Erro ao enviar lead:", response.status, text);
@@ -327,16 +331,15 @@ export default function Home() {
     <div className="overflow-hidden bg-[var(--background)]">
 
       {/* hero section */}
-      <div className="mx-auto py-5 xl:py-15 relative z-10 bg-[var(--bgclaro)]">
+      <div className="mx-auto py-10 relative z-10 bg-[var(--bgclaro)]">
         <div className="max-w-[var(--largura)] px-5 mx-auto relative">
             
-
         {/* Logo */}
         <div className="max-w-[300px] md:max-w-[700px] my-7 table mx-auto">
-          <Image src="/logo.svg" alt="Amazon IA" width={400} height={200} priority />
+          <Image src="/logo.svg" alt="Amazon IA" width={300} height={300} priority />
         </div>
             
-        <div className="max-w-[900px] text-center text-3xl md:text-4xl leading-[1.1] mx-auto z-50 relative">
+        <div className="max-w-[900px] text-center text-2xl md:text-3xl leading-[1.1] mx-auto z-50 relative">
           <p className="font-bold text-[var(--primary)]">
             O ambiente onde os principais empresários e profissionais do Norte se conectam diretamente com todas as tendências e grandes nomes do mercado
           </p>
@@ -350,7 +353,7 @@ export default function Home() {
 
       {/*section formulario 8*/}
       <div className="relative bg-[var(--primary)]">
-        <div id="formulario" className="max-w-[var(--largura)] px-5 mx-auto py-10 md:py-20 relative">
+        <div id="formulario" className="max-w-[var(--largura)] px-5 mx-auto py-20 relative">
 
           <h3 className="text-white uppercase fontspace font-bold text-2xl mb-10 text-center z-1 relative">Preencha seus dados e faça parte do Digital Club.</h3>
           
