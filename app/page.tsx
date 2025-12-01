@@ -368,39 +368,44 @@ export default function Home() {
   }, [isVisible, hasAppeared]);
 
   return (
-    <div className="overflow-hidden bg-[var(--background)]">
+    <div className="overflow-hidden bg-[var(--primary)]">
 
       {/* hero section */}
-      <div className="mx-auto py-10 relative z-10 bg-[var(--bgclaro)]">
-        <div className="max-w-[var(--largura)] px-5 mx-auto relative">
+      <div className="mx-auto py-20 z-10 bg-[var(--bgclaro)] bg-[url(/bghero.jpg)] bg-left bg-cover bg-no-repeat">
+        <div className="max-w-[var(--largura)] px-5 mx-auto relative grid grid-cols-12 gap-5 relative z-10">
 
-          {/* Logo */}
-          <div className="max-w-[300px] md:max-w-[700px] my-7 table mx-auto">
-            <Image src="/logo.svg" alt="Amazon IA" width={300} height={300} priority />
+          <div className="col-span-12 md:col-span-7">
+            <div className="max-w-[150px] md:max-w-[200px] mb-8">
+              <Image src="/logo.svg" alt="Digital Club" width={500} height={500} priority />
+            </div>
+
+            <h1 className="text-2xl md:text-4xl leading-[1.1] font-bold text-white mb-4">
+              O ambiente onde os principais empresários e profissionais do Norte se conectam
+            </h1>
+            <p className="text-white text-lg leading-[1.2]">Diretamente com todas as tendências e grandes nomes do mercado</p>
+            <a href="#formulario" className="bg-[var(--secondary)] rounded-full text-center inline-block mt-10 uppercase font-bold px-8 py-3 text-lg text-white">Comprar Agora</a>
           </div>
-
-          <div className="max-w-[900px] text-center text-2xl md:text-3xl leading-[1.1] mx-auto z-50 relative">
-            <p className="font-bold text-[var(--primary)]">
-              O ambiente onde os principais empresários e profissionais do Norte se conectam diretamente com todas as tendências e grandes nomes do mercado
-            </p>
-          </div>
-
-          <a href="#formulario" className="bg-[var(--primary)] rounded-full text-center table mx-auto mt-10 uppercase font-bold px-8 py-3 text-lg text-white">Comprar Agora</a>
 
         </div>
+
+        <div className="bg-linear-to-r from-[var(--primary)] to-[var(--primary)]/50 absolute w-full h-full top-0 left-0"></div>
       </div>
 
       {/*section formulario 8*/}
       <div className="relative bg-[var(--primary)]">
         <div id="formulario" className="max-w-[var(--largura)] px-5 mx-auto py-20 relative">
 
+          <div className="absolute w-[1000px] h-[1000px] -left-[800px] md:-left-[600px] -top-[100px] opacity-5">
+            <Image src={"/icone.svg"} width={1000} height={1000} alt=""/>
+          </div>
+
           <h3 className="text-white uppercase fontspace font-bold text-2xl mb-10 text-center z-1 relative">Preencha seus dados e faça parte do Digital Club.</h3>
 
-          <div id="form" className="relative">
+          <div id="form" className="relative z-1">
             <div className="max-w-[800px] mx-auto relative">
 
               <div className="mx-auto z-1 relative">
-                <div className="form border-1 border-white/20 rounded-xl py-5 md:py-10 px-5 md:px-20 bg-white/8">
+                <div className="form border-1 border-white/20 rounded-xl py-5 md:py-15 px-5 md:px-20 bg-[var(--primary)]">
 
                   {/* Step-by-step form */}
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -727,6 +732,8 @@ export default function Home() {
 
         </div>
       </div>
+
+      <Footer/>
 
     </div>
   )
