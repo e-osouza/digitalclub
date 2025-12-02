@@ -72,10 +72,15 @@ export default function Home() {
     faturamento: "",
     concordaPrivacidade: false,
   })
+
   const [nomeErro, setNomeErro] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // controle de loading
 
   const handleSubmit = async (e?: React.FormEvent, envioSimplificado = false) => {
     e?.preventDefault(); // só previne se existir evento
+
+    // se já estiver enviando, ignora novos submits
+    if (isSubmitting) return;
 
     if (!envioSimplificado) {
       const isValid =
@@ -89,6 +94,8 @@ export default function Home() {
 
       if (!isValid) return;
     }
+
+    setIsSubmitting(true); // começa o loading
 
     if (typeof window !== "undefined" && window.dataLayer) {
       window.dataLayer.push({
@@ -217,16 +224,22 @@ export default function Home() {
         }
         router.push(obrigadoUrl);
 
-      } else {
-        const text = await response.text();
-        console.error("❌ Erro ao enviar lead para RD Station:", response.status, text);
-
-        dlPush({
-          event: "form_submit_error",
-          form_name: "confirmacao_digital_club",
-          status: response.status,
-        });
+        // não voltamos isSubmitting para false aqui de propósito:
+        // o componente será desmontado ao redirecionar
+        return;
       }
+
+      // Se NÃO response.ok:
+      const text = await response.text();
+      console.error("❌ Erro ao enviar lead para RD Station:", response.status, text);
+
+      dlPush({
+        event: "form_submit_error",
+        form_name: "confirmacao_digital_club",
+        status: response.status,
+      });
+
+      setIsSubmitting(false); // libera o botão em caso de erro
     } catch (error) {
       console.error("⚠️ Erro na integração com RD Station:", error);
 
@@ -235,6 +248,8 @@ export default function Home() {
         form_name: "confirmacao_digital_club",
         error_type: "exception",
       });
+
+      setIsSubmitting(false); // libera o botão em caso de exceção
     }
   };
 
@@ -323,6 +338,7 @@ export default function Home() {
       const permitido = ["empresário", "diretor ou gestor"];
 
       if (!permitido.includes(resposta)) {
+        // dispara o envio simplificado para perfis não permitidos
         handleSubmit(undefined, true);
         return;
       }
@@ -367,6 +383,8 @@ export default function Home() {
     };
   }, [isVisible, hasAppeared]);
 
+  // daqui pra baixo vem o return (...)
+
   return (
     <div className="overflow-hidden bg-[var(--primary)]">
 
@@ -392,7 +410,7 @@ export default function Home() {
       </div>
 
       {/*section formulario*/}
-      <div className="relative bg-[var(--primary)]">
+      <div className="relative bg-[var(--primary)] overflow-hidden">
         <div id="formulario" className="max-w-[var(--largura)] px-5 mx-auto py-20 relative">
 
           <div className="absolute w-[1000px] h-[1000px] -left-[800px] md:-left-[600px] -top-[100px] opacity-5">
@@ -685,31 +703,51 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center gap-3">
-                        {/* ✅ Só mostra o botão se o campo do step atual estiver preenchido */}
                         {currentStep !== "faturamento" ? (
-                          formData[currentStep] && formData[currentStep].trim() !== "" && (
+                          formData[currentStep] &&
+                          formData[currentStep].trim() !== "" && (
                             <button
                               type="button"
                               onClick={nextStep}
-                              className="bg-[var(--secondary)] flex items-center text-white rounded-full uppercase font-bold px-8 py-3 leading-[1] cursor-pointer"
+                              disabled={isSubmitting}
+                              className="bg-[var(--secondary)] flex items-center gap-2 text-white rounded-full uppercase font-bold px-8 py-3 leading-[1] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                             >
-                              {stepIndex === 3 &&
-                                formData.perfil !== "Empresário" &&
-                                formData.perfil !== "Diretor ou Gestor"
-                                ? "ir para compra"
-                                : "próximo"}
+                              {isSubmitting ? (
+                                <>
+                                  Enviando...
+                                  <span className="w-4 h-4 border-2 border-white/60 border-t-transparent rounded-full animate-spin" />
+                                </>
+                              ) : (
+                                <>
+                                  {stepIndex === 3 &&
+                                  formData.perfil !== "Empresário" &&
+                                  formData.perfil !== "Diretor ou Gestor"
+                                    ? "ir para compra"
+                                    : "próximo"}
+                                </>
+                              )}
                             </button>
                           )
                         ) : (
                           <button
                             type="submit"
-                            disabled={false}
-                            className="bg-[var(--secondary)] flex items-center text-white rounded-full uppercase font-bold px-8 py-3 leading-[1] disabled:opacity-60 cursor-pointer"
+                            disabled={isSubmitting}
+                            className="bg-[var(--secondary)] flex items-center gap-2 text-white rounded-full uppercase font-bold px-8 py-3 leading-[1] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                           >
-                            Ir para a compra <ArrowRight />
+                            {isSubmitting ? (
+                              <>
+                                Enviando...
+                                <span className="w-4 h-4 border-2 border-white/60 border-t-transparent rounded-full animate-spin" />
+                              </>
+                            ) : (
+                              <>
+                                Ir para a compra <ArrowRight />
+                              </>
+                            )}
                           </button>
                         )}
                       </div>
+
                     </div>
 
                     {/* progress */}
